@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.SendResponse;
 
 public class CommandsHandler {
     private final TelegramBot bot;
@@ -19,11 +20,9 @@ public class CommandsHandler {
     private final static String UNTRACK_CMD = "/untrack";
     private final static String LIST_CMD = "/list";
 
-
-
-    public void handle(Update update) {
-        if (update != null && update.message() != null) {
-            String response = switch(update.message().text()) {
+    public SendResponse handle(Update update) {
+        if (update != null && update.message() != null && update.message().text() != null) {
+            String response = switch (update.message().text()) {
                 case START_CMD -> StartCommand.handle();
                 case HELP_CMD -> HelpCommand.handle();
                 case TRACK_CMD -> TrackCommand.handle();
@@ -38,7 +37,9 @@ public class CommandsHandler {
                 .disableNotification(true)
                 .replyToMessageId(update.message().messageId());
 
-            bot.execute(request);
+            return bot.execute(request);
         }
+
+        return null;
     }
 }

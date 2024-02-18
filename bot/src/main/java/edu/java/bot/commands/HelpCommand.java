@@ -1,6 +1,9 @@
 package edu.java.bot.commands;
 
 public class HelpCommand {
+    private HelpCommand() {
+    }
+
     private static final String HELP_MESSAGE = """
         Доступные команды:
 
