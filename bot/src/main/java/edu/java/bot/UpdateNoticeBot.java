@@ -10,6 +10,7 @@ import edu.java.bot.commands.CommandsHandler;
 import java.util.List;
 import lombok.Getter;
 
+//@Component
 public class UpdateNoticeBot {
     private final TelegramBot bot;
     @Getter private final CommandsHandler commandsHandler;
