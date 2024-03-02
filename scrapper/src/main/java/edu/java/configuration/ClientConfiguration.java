@@ -1,14 +1,14 @@
 package edu.java.configuration;
 
-import edu.java.clients.GitHubClientImpl;
-import edu.java.clients.StackOverflowClientImpl;
+import edu.java.clients.github.GitHubClientImpl;
+import edu.java.clients.stackoverflow.StackOverflowClientImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ClientConfiguration {
     @Bean
-    public GitHubClientImpl gitHubClient() {
+    GitHubClientImpl gitHubClient() {
         return new GitHubClientImpl();
     }
 
