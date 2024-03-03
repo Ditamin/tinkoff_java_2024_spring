@@ -7,7 +7,7 @@ public class StartCommand implements Command {
     private static final String NAME = "/start";
     private static final String DESCRIPTION = "начать работу с ботом";
     private static final String MESSAGE = "Привет! Я бот, который может оповещать тебя об обновленияx "
-        + "отслеживаемых тобой статей и проектов на GitHub и Stack Overflow.\n\n";
+        + "отслеживаемых тобой статей и проектов на GitHub и Stack Overflow.";
 
 
     @Override

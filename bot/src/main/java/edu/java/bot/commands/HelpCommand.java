@@ -1,7 +1,5 @@
 package edu.java.bot.commands;
 
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,7 +7,7 @@ public class HelpCommand implements Command {
     private static final String NAME = "/help";
     private static final String DESCRIPTION = "вывести список доступных команд";
 
-    private static String HELP_MESSAGE = "Доступные команды:\n\n";
+    private static final String HELP_MESSAGE = "Доступные команды:\n\n";
 
     @Override
     public String handle() {

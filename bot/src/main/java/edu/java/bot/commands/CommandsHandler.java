@@ -7,12 +7,10 @@ import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.SendResponse;
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+import lombok.Getter;
 
 public class CommandsHandler {
     private final TelegramBot bot;
@@ -64,7 +62,7 @@ public class CommandsHandler {
     }
 
     private ArrayList<String> getRedundantCommands() {
-        return new ArrayList<>(List.of(
+        return new ArrayList<String>(List.of(
             new StartCommand().getName(),
             new HelpCommand().getName()
         ));
@@ -80,7 +78,7 @@ public class CommandsHandler {
         return null;
     }
 
-    private String makeResponse(Update update) {
+    public String makeResponse(Update update) {
         String incomingCommand = update.message().text().split(" ")[0];
 
         for (Command command : commands) {
@@ -92,7 +90,7 @@ public class CommandsHandler {
         return UNKNOWN_CMD;
     }
 
-    private SendMessage makeRequest(Update update, String response) {
+    public SendMessage makeRequest(Update update, String response) {
         return new SendMessage(update.message().chat().id(), response)
             .parseMode(ParseMode.HTML)
             .disableWebPagePreview(true)
