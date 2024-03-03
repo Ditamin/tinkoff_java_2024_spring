@@ -2,11 +2,11 @@ package edu.java.clients.bot;
 
 
 import edu.java.model.LinkUpdateRequest;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import java.net.URI;
 
 @Service
 public class BotClientImpl implements BotClient {

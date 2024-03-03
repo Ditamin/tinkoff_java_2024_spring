@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class AlreadyExistedLinkException extends RuntimeException{
+public class AlreadyExistedLinkException extends RuntimeException {
     private final String message;
 }

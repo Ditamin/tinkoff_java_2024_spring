@@ -10,6 +10,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class ScrapperClientImpl implements ScrapperClient {
 
     private final WebClient client;
+    private final static String TG_CHAT_URI = "/tg-chat/{id}";
+    private final static String LINKS_URI = "/links";
 
     @Value("${scrapper.baseUrl}")
     String baseUrl;
@@ -26,7 +28,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     @Override
     public String addChat(Integer id) {
         return client.post()
-            .uri("/tg-chat/{id}", id)
+            .uri(TG_CHAT_URI, id)
             .retrieve()
             .bodyToMono(String.class)
             .block();
@@ -35,7 +37,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     @Override
     public String deleteChat(Integer id) {
         return client.delete()
-            .uri("/tg-chat/{id}", id)
+            .uri(TG_CHAT_URI, id)
             .retrieve()
             .bodyToMono(String.class)
             .block();
@@ -44,7 +46,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     @Override
     public ListLinksResponse getLinks(Integer id) {
         return client.get()
-            .uri("/links")
+            .uri(LINKS_URI)
             .retrieve()
             .bodyToMono(ListLinksResponse.class)
             .block();
@@ -53,7 +55,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     @Override
     public LinkResponse addLink(Integer id) {
         return client.post()
-            .uri("/links")
+            .uri(LINKS_URI)
             .retrieve()
             .bodyToMono(LinkResponse.class)
             .block();
@@ -62,7 +64,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     @Override
     public LinkResponse deleteLink(Integer id) {
         return client.delete()
-            .uri("/links")
+            .uri(LINKS_URI)
             .retrieve()
             .bodyToMono(LinkResponse.class)
             .block();
