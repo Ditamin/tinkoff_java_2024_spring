@@ -1,27 +1,17 @@
 package edu.java.scrapper.clientsTest;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.http.Body;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.clients.github.GitHubClientImpl;
-import edu.java.clients.stackoverflow.StackOverflowClient;
 import edu.java.clients.stackoverflow.StackOverflowClientImpl;
-import edu.java.response.github.GitHubResponse;
-import edu.java.response.github.GitHubUser;
-import edu.java.response.stackoveflow.StackOverFlowItem;
-import edu.java.response.stackoveflow.StackOverFlowResponse;
-import edu.java.response.stackoveflow.StackOverFlowUser;
+import edu.java.dto.stackoveflow.StackOverFlowItem;
+import edu.java.dto.stackoveflow.StackOverFlowResponse;
+import edu.java.dto.stackoveflow.StackOverFlowUser;
 import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 

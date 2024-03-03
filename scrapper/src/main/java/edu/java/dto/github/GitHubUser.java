@@ -1,4 +1,4 @@
-package edu.java.response.github;
+package edu.java.dto.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
