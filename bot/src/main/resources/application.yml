@@ -1,5 +1,5 @@
 app:
-  telegram-token: System.getenv("TELEGRAMBOT_TOKEN")
+  telegram-token: "${TELEGRAMBOT_TOKEN}"
 
 spring:
   application:

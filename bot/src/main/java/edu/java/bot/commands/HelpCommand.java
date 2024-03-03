@@ -1,18 +1,34 @@
 package edu.java.bot.commands;
 
-public class HelpCommand {
-    private HelpCommand() {
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class HelpCommand implements Command {
+    private static final String NAME = "/help";
+    private static final String DESCRIPTION = "вывести список доступных команд";
+
+    private static String HELP_MESSAGE = "Доступные команды:\n\n";
+
+    @Override
+    public String handle() {
+        StringBuilder text = new StringBuilder();
+
+        for (Command command : CommandsHandler.getCommands()) {
+            text.append(command.getName()).append(" - ").append(command.getDescription()).append("\n");
+        }
+
+        return HELP_MESSAGE + text;
     }
 
-    private static final String HELP_MESSAGE = """
-        Доступные команды:
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-        /help - выводит доступные команды
-        /track (URL) добавляет ссылку в отслеживаемые
-        /untrack (URL) удаляет ссылку из отслеживаемых
-        /list выводит список отслеживаемых ссылок""";
-
-    public static String handle() {
-        return HELP_MESSAGE;
+    @Override
+    public String getDescription() {
+        return DESCRIPTION;
     }
 }

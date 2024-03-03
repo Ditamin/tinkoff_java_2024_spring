@@ -1,5 +1,6 @@
 package edu.java.bot.commands;
 
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
@@ -11,23 +12,28 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class CommandsHandlerTest {
-//    UpdateNoticeBot bot = new UpdateNoticeBot(System.getenv("TELEGRAMBOT_TOKEN"));
-//    Long chatId = 1781258823L;
-//
+    UpdateNoticeBot bot = new UpdateNoticeBot(System.getenv("TELEGRAMBOT_TOKEN"));
+    Long chatId = 1781258823L;
+
 //    @Test
 //    void startCommandTest() {
+//        TelegramBot bot = mock(TelegramBot.class);
 //        Update update = mock(Update.class);
 //        Message message = mock(Message.class);
 //        Chat chat = mock(Chat.class);
+//
 //        when(update.message()).thenReturn(message);
 //        when(message.text()).thenReturn("/start");
 //        when(message.chat()).thenReturn(chat);
 //        when(message.chat().id()).thenReturn(chatId);
 //        when(update.message().chat().id()).thenReturn(chatId);
-//        SendResponse response = bot.getCommandsHandler().handle(update);
-//        Assertions.assertThat(response.message().text()).isEqualTo(StartCommand.handle());
-//    }
+//        when(update.message().messageId()).thenReturn(1);
 //
+//        CommandsHandler commandsHandler = new CommandsHandler(bot);
+//        SendResponse response = commandsHandler.handle(update);
+//        Assertions.assertThat(response.message().text()).isEqualTo(new StartCommand().handle());
+//    }
+
 //    @Test
 //    void helpCommandTest() {
 //        Update update = mock(Update.class);
@@ -39,7 +45,7 @@ class CommandsHandlerTest {
 //        when(message.chat().id()).thenReturn(chatId);
 //        when(update.message().chat().id()).thenReturn(chatId);
 //        SendResponse response = bot.getCommandsHandler().handle(update);
-//        Assertions.assertThat(response.message().text()).isEqualTo(HelpCommand.handle());
+//        Assertions.assertThat(response.message().text()).isEqualTo(new HelpCommand().handle());
 //    }
 //
 //    @Test
@@ -53,7 +59,7 @@ class CommandsHandlerTest {
 //        when(message.chat().id()).thenReturn(chatId);
 //        when(update.message().chat().id()).thenReturn(chatId);
 //        SendResponse response = bot.getCommandsHandler().handle(update);
-//        Assertions.assertThat(response.message().text()).isEqualTo(TrackCommand.handle());
+//        //Assertions.assertThat(response.message().text()).isEqualTo(TrackCommand.handle());
 //    }
 //
 //    @Test
@@ -67,7 +73,7 @@ class CommandsHandlerTest {
 //        when(message.chat().id()).thenReturn(chatId);
 //        when(update.message().chat().id()).thenReturn(chatId);
 //        SendResponse response = bot.getCommandsHandler().handle(update);
-//        Assertions.assertThat(response.message().text()).isEqualTo(UntrackCommand.handle());
+//        //Assertions.assertThat(response.message().text()).isEqualTo(UntrackCommand.handle());
 //    }
 //
 //    @Test
@@ -81,6 +87,6 @@ class CommandsHandlerTest {
 //        when(message.chat().id()).thenReturn(chatId);
 //        when(update.message().chat().id()).thenReturn(chatId);
 //        SendResponse response = bot.getCommandsHandler().handle(update);
-//        Assertions.assertThat(response.message().text()).isEqualTo(ListCommand.handle());
+//        //Assertions.assertThat(response.message().text()).isEqualTo(ListCommand.handle());
 //    }
 }

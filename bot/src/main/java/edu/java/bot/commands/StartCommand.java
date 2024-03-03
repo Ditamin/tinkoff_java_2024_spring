@@ -1,13 +1,27 @@
 package edu.java.bot.commands;
 
-public class StartCommand {
-    private static final String DESCRIPTION = "Привет! Я бот, который может оповещать тебя об обновлении"
+import org.springframework.stereotype.Component;
+
+@Component
+public class StartCommand implements Command {
+    private static final String NAME = "/start";
+    private static final String DESCRIPTION = "начать работу с ботом";
+    private static final String MESSAGE = "Привет! Я бот, который может оповещать тебя об обновленияx "
         + "отслеживаемых тобой статей и проектов на GitHub и Stack Overflow.\n\n";
 
-    private StartCommand() {
+
+    @Override
+    public String handle() {
+        return MESSAGE;
     }
 
-    public static String handle() {
-        return DESCRIPTION + HelpCommand.handle();
+    @Override
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public String getDescription() {
+        return DESCRIPTION;
     }
 }
