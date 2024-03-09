@@ -1,6 +1,6 @@
 package edu.java.clients.github;
 
-import edu.java.response.github.GitHubResponse;
+import edu.java.dto.github.GitHubResponse;
 import java.net.URISyntaxException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

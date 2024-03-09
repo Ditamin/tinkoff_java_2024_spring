@@ -1,5 +1,6 @@
 package edu.java.configuration;
 
+import edu.java.clients.bot.BotClientImpl;
 import edu.java.clients.github.GitHubClientImpl;
 import edu.java.clients.stackoverflow.StackOverflowClientImpl;
 import org.springframework.context.annotation.Bean;
@@ -15,5 +16,9 @@ public class ClientConfiguration {
     @Bean
     public StackOverflowClientImpl stackOverflowClient() {
         return new StackOverflowClientImpl();
+    }
+
+    @Bean BotClientImpl botClient() {
+        return new BotClientImpl();
     }
 }

@@ -1,18 +1,16 @@
-package edu.java.response.stackoveflow;
+package edu.java.dto.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record StackOverFlowItem(
-    @JsonProperty("question_id")
+public record GitHubResponse(
     Long id,
     @JsonProperty("owner")
-    StackOverFlowUser author,
-    @JsonProperty("title")
+    GitHubUser author,
     String name,
-    @JsonProperty("last_activity_date")
+    @JsonProperty("updated_at")
     OffsetDateTime lastUpdate
 ) {
 }

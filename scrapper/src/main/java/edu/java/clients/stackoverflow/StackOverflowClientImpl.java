@@ -1,6 +1,6 @@
 package edu.java.clients.stackoverflow;
 
-import edu.java.response.stackoveflow.StackOverFlowResponse;
+import edu.java.dto.stackoveflow.StackOverFlowResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
