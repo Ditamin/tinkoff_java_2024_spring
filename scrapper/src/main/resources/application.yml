@@ -1,12 +1,15 @@
 app:
   scheduler:
     enable: true
-    interval: 10s
-    force-check-delay: 10s
+    interval: 10000
+    force-check-delay: 10000
 
 spring:
   application:
     name: scrapper
+
+  liquibase:
+    enabled: false
 
 server:
   port: 8080
@@ -22,6 +25,9 @@ stackoverflow:
 
 bot:
   baseUrl: "http://localhost:8090"
+
+db:
+  baseUrl: "jdbc:postgresql://localhost:5432/scrapper"
 
 springdoc:
   swagger-ui:
