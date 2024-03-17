@@ -62,11 +62,13 @@ public class JdbcConnectionDao {
         return jdbcTemplate.query(String.format("SELECT * FROM links WHERE id IN (%s)", inSql),
             linksId.toArray(),
             (resultSet, rowNum) -> new Link(
-                resultSet.getLong("id"),
-                URI.create(resultSet.getString("url")),
+                resultSet.getLong(1),
+                URI.create(resultSet.getString(2)),
                 OffsetDateTime.ofInstant(
-                    Instant.ofEpochMilli(resultSet.getTimestamp("updatedAt").getTime()),
-                    ZoneId.of("UTC"))));
+                    Instant.ofEpochMilli(resultSet.getTimestamp(3).getTime()),
+                    ZoneId.of("UTC")),
+                resultSet.getLong(4),
+                resultSet.getLong(5)));
     }
 
     public List<Long> findAllChats(Long linkId) {

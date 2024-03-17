@@ -34,7 +34,9 @@ public class JdbcLinkDao {
                 resultSet.getLong(1),
                 URI.create(resultSet.getString(2)),
                 OffsetDateTime.ofInstant(Instant.ofEpochMilli(resultSet.getTimestamp(3).getTime()),
-                    ZoneId.of(UTC))),
+                    ZoneId.of(UTC)),
+                resultSet.getLong(4),
+                resultSet.getLong(5)),
             id);
     }
 
@@ -79,20 +81,29 @@ public class JdbcLinkDao {
         }
     }
 
+    public void update(Link link) {
+        log.info("Обновление ссылки " + link.url());
+
+        jdbcTemplate.update("UPDATE links SET updated_at = ?, answer_count = ? WHERE id = ?",
+            link.updatedAt(), link.answerAmount(), link.id());
+    }
+
     private final int linkLimit = 1;
 
+    @SuppressWarnings("MagicNumber")
     public List<Link> findDeprecated() {
         log.info("Поиск давно не обновлявшихся ссылок");
 
         return jdbcTemplate.query(
             "SELECT * FROM links ORDER BY updatedAt LIMIT ?",
             (resultSet, rowNum) -> new Link(
-                resultSet.getLong("id"),
-                URI.create(resultSet.getString("url")),
+                resultSet.getLong(1),
+                URI.create(resultSet.getString(2)),
                 OffsetDateTime.ofInstant(
-                    Instant.ofEpochMilli(resultSet.getTimestamp("updatedAt").getTime()),
-                    ZoneId.of(UTC)
-                )
+                    Instant.ofEpochMilli(resultSet.getTimestamp(3).getTime()),
+                    ZoneId.of(UTC)),
+                resultSet.getLong(4),
+                resultSet.getLong(5)
             ),
             linkLimit
         );

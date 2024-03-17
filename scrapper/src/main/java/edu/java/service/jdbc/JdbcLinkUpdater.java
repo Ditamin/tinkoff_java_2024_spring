@@ -49,7 +49,19 @@ public class JdbcLinkUpdater implements LinkUpdater {
             GitHubResponse response = gitHubClient.fetchUpdates(user, repo);
 
             if (response.lastUpdate().isAfter(link.updatedAt())) {
-                noticeBotClient(link);
+                String msg = "Появилось новое изменение в репозитории "
+                    + response.name() + " на GitHub у " + response.author().login();
+
+                Link newLink = new Link(
+                    link.id(),
+                    link.url(),
+                    response.lastUpdate(),
+                    link.answerAmount(),
+                    link.commentAmount()
+                );
+
+                linkDao.update(newLink);
+                noticeBotClient(newLink, msg);
             }
 
         } catch (URISyntaxException e) {
@@ -64,15 +76,36 @@ public class JdbcLinkUpdater implements LinkUpdater {
         StackOverFlowResponse response = stackOverflowClient.fetchUpdates(questionId);
 
         if (response.item().getFirst().lastUpdate().isAfter(link.updatedAt())) {
-            noticeBotClient(link);
+            String msg = "Появилось новое изменение в вопросе на StackOverflow с темой "
+                + response.item().getFirst().name();
+
+            if (response.commentAmount() < link.commentAmount()) {
+                msg = "Появился новый комментарий в вопросе на StackOverflow с темой "
+                    + response.item().getFirst().name();
+            }
+
+            if (response.item().getFirst().answerCount() < link.answerAmount()) {
+                msg = "Появился новый ответ в вопросе на StackOverflow с темой "
+                    + response.item().getFirst().name();
+            }
+
+            Link newLink = new Link(
+                link.id(),
+                link.url(),
+                response.item().getFirst().lastUpdate(),
+                response.item().getFirst().answerCount(),
+                response.commentAmount());
+
+            linkDao.update(newLink);
+            noticeBotClient(newLink, msg);
         }
     }
 
-    void noticeBotClient(Link link) {
+    void noticeBotClient(Link link, String msg) {
         botClient.sendUpdateLink(
             new LinkUpdateRequest(link.id(),
                 link.url(),
-                "Обновление",
+                msg,
                 connectionDao.findAllChats(link.id())));
     }
 }

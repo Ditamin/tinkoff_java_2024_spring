@@ -13,6 +13,8 @@ public record StackOverFlowItem(
     @JsonProperty("title")
     String name,
     @JsonProperty("last_activity_date")
-    OffsetDateTime lastUpdate
+    OffsetDateTime lastUpdate,
+    @JsonProperty("answerCount")
+    Long answerCount
 ) {
 }
