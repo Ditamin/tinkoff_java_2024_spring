@@ -31,22 +31,37 @@ public class ScrapperController {
 
     private final static String NOT_EXISTED_CHAT_MSG = "Чат не существует";
 
+    @GetMapping("/tg-chat/{id}/status")
+    public Long getСhatStatus(@PathVariable("id") Long id) {
+        log.info("Запрос на получения статуса чата");
+
+        return tgChatService.getStatus(id);
+    }
+
+    @PostMapping("/tg-chat/{id}/status/{status}")
+    public String changeСhatStatus(@PathVariable("id") Long id, @PathVariable("status") Long status) {
+        log.info("Запрос на изменения статуса чата");
+
+        tgChatService.setStatus(id, status);
+        return "Статус изменен";
+    }
+
     @PostMapping("/tg-chat/{id}")
-    public String addChat(@PathVariable("id") Integer id) {
+    public String addChat(@PathVariable("id") Long id) {
         log.info("Запрос на регистрацию чата " + id);
 
         try {
             tgChatService.register(id);
 
         } catch (AlreadyRegisteredChatException e) {
-            throw new AlreadyRegisteredChatException("Чат уже существует");
+            throw new AlreadyRegisteredChatException();
         }
 
         return "Чат зарегистрирован";
     }
 
     @DeleteMapping("/tg-chat/{id}")
-    public String deleteChat(@PathVariable("id") Integer id) {
+    public String deleteChat(@PathVariable("id") Long id) {
         log.info("Запрос на удаление чата " + id);
 
         try {
@@ -60,7 +75,7 @@ public class ScrapperController {
     }
 
     @GetMapping("/links")
-    public ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") Integer chatId) {
+    public ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") Long chatId) {
         log.info("Запрос на получение всех ссылок");
 
         List<Link> links = null;
@@ -76,7 +91,7 @@ public class ScrapperController {
     }
 
     @PostMapping("/links")
-    public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Integer chatId,
+    public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Long chatId,
         @RequestBody @Valid AddLinkRequest request) {
         log.info("Запрос на добавление ссылки");
 
@@ -94,7 +109,7 @@ public class ScrapperController {
     }
 
     @DeleteMapping("/links")
-    public LinkResponse deleteLink(@RequestHeader("Tg-Chat-Id") Integer chatId,
+    public LinkResponse deleteLink(@RequestHeader("Tg-Chat-Id") Long chatId,
         @RequestBody @Valid RemoveLinkRequest request) {
         log.info("Запрос на удаление ссылки");
 

@@ -18,7 +18,7 @@ public class JdbcTgChatService implements TgChatService {
         log.info("Регистрация чата " + chatId);
 
         if (tgChatRepository.find(chatId) != null) {
-            throw new AlreadyRegisteredChatException("Чат уже существует");
+            throw new AlreadyRegisteredChatException();
         }
 
         tgChatRepository.add(chatId);
@@ -29,5 +29,15 @@ public class JdbcTgChatService implements TgChatService {
         log.info("Удаление чата " + chatId);
 
         tgChatRepository.delete(chatId);
+    }
+
+    @Override
+    public void setStatus(long chatId, long status) {
+        tgChatRepository.setStatus(chatId, status);
+    }
+
+    @Override
+    public long getStatus(long chatId) {
+        return tgChatRepository.getStatus(chatId);
     }
 }

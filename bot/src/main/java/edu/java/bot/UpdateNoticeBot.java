@@ -6,17 +6,23 @@ import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.commands.CommandsHandler;
 import java.util.List;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UpdateNoticeBot implements UpdatesListener {
-    private final TelegramBot bot;
-    @Getter private final CommandsHandler commandsHandler;
+    @Autowired
+    TelegramBot bot;
+    @Autowired
+    CommandsHandler commandsHandler;
 
 
-    public UpdateNoticeBot(String token) {
-        this.bot = new TelegramBot(token);
-        this.commandsHandler = new CommandsHandler(bot);
+    public UpdateNoticeBot() {
+        bot.setUpdatesListener(this);
+    }
+
+    public UpdateNoticeBot(TelegramBot telegramBot) {
+        bot = telegramBot;
         bot.setUpdatesListener(this);
     }
 

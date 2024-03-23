@@ -19,8 +19,8 @@ public class JdbcConfig {
     public DataSource dataSource() {
         return DataSourceBuilder.create()
             .url(baseUrl)
-            .username(System.getenv("username"))
-            .password(System.getenv("password"))
+            .username("postgres")
+            .password("postgres")
             .build();
     }
 

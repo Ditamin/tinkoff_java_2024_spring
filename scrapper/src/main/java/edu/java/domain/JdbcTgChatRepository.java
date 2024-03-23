@@ -1,6 +1,7 @@
 package edu.java.domain;
 
 import java.util.NoSuchElementException;
+import edu.java.exceptions.AlreadyRegisteredChatException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -48,5 +49,19 @@ public class JdbcTgChatRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    @Transactional
+    public void setStatus(Long chatId, long status) {
+        log.info("Чат " + chatId + " меняет статус");
+
+        jdbcTemplate.update("UPDATE chats SET status = ? WHERE id = ?", status, chatId);
+    }
+
+    @Transactional
+    public long getStatus(Long chatId) {
+        log.info("Получение статуса чата " + chatId);
+
+        return jdbcTemplate.queryForObject("SELECT status FROM chats WHERE id = ?", Long.class, chatId);
     }
 }

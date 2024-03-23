@@ -2,9 +2,10 @@ package edu.java.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
+@Setter
 public class AlreadyRegisteredChatException extends RuntimeException {
-    private final String message;
+    private String message;
 }

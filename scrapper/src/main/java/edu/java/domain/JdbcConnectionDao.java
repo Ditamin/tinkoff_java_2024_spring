@@ -5,6 +5,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcConnectionDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    JdbcLinkDao jdbcLinkDao;
 
     public JdbcConnectionDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -35,6 +38,15 @@ public class JdbcConnectionDao {
         log.info("Удаление " + linkId + " из чата " + chatId);
 
         jdbcTemplate.update("DELETE FROM connections WHERE chat = ? AND link = ?", chatId, linkId);
+
+        Integer remain = jdbcTemplate.queryForObject(
+            "SELECT COUNT(*) FROM connections WHERE link = ?",
+            Integer.class,
+            linkId);
+
+        if (remain == 0) {
+            jdbcLinkDao.delete(linkId);
+        }
     }
 
     @Transactional
@@ -56,6 +68,10 @@ public class JdbcConnectionDao {
 
         List<Long> linksId = jdbcTemplate.queryForList("SELECT link FROM connections WHERE chat = ?",
             Long.class, chatId);
+
+        if (linksId.size() == 0) {
+            return new ArrayList<>();
+        }
 
         String inSql = String.join(",", Collections.nCopies(linksId.size(), "?"));
 

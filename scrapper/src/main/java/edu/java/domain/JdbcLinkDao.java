@@ -18,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcLinkDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
-    @Autowired
-    JdbcConnectionDao connectionDao;
 
     private static final String UTC = "UTC";
 
@@ -55,16 +53,15 @@ public class JdbcLinkDao {
     }
 
     @Transactional
-    public Link delete(URI url) {
-        log.info("Удаление url = " + url + " из links");
+    public Link delete(Long linkId) {
+        log.info("Удаление ссылки " + linkId + " из links");
 
-        Link link = find(url);
+        Link link = getLink(linkId);
 
         if (link == null) {
             return null;
         }
 
-        connectionDao.deleteAllChats(link.id());
         jdbcTemplate.update("DELETE FROM links WHERE id = ?", link.id());
         return link;
     }
@@ -73,7 +70,8 @@ public class JdbcLinkDao {
         log.info("Поиск url = " + url + " в links");
 
         try {
-            Long id = jdbcTemplate.queryForObject("SELECT id FROM links WHERE url = ?", Long.class, url.toString());
+            Long id = jdbcTemplate.queryForObject("SELECT id FROM links WHERE url = ?",
+                Long.class, url.toString());
             return getLink(id);
 
         } catch (EmptyResultDataAccessException e) {
@@ -81,6 +79,7 @@ public class JdbcLinkDao {
         }
     }
 
+    @Transactional
     public void update(Link link) {
         log.info("Обновление ссылки " + link.url());
 
@@ -95,7 +94,7 @@ public class JdbcLinkDao {
         log.info("Поиск давно не обновлявшихся ссылок");
 
         return jdbcTemplate.query(
-            "SELECT * FROM links ORDER BY updatedAt LIMIT ?",
+            "SELECT * FROM links ORDER BY updated_at LIMIT ?",
             (resultSet, rowNum) -> new Link(
                 resultSet.getLong(1),
                 URI.create(resultSet.getString(2)),

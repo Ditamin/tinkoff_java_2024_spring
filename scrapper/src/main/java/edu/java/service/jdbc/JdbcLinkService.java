@@ -44,7 +44,7 @@ public class JdbcLinkService implements LinkService {
         Link link = linkDao.find(url);
 
         if (link == null) {
-            return null;
+            throw new NoSuchElementException();
         }
 
         if (!connectionDao.find(chatId, link.id())) {
