@@ -5,5 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record StackOverFlowResponse(@JsonProperty("items") List<StackOverFlowItem> item) {
+public record StackOverFlowResponse(
+    @JsonProperty("items") List<StackOverFlowItem> item,
+    Long commentAmount
+) {
 }

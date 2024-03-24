@@ -2,16 +2,21 @@ package edu.java.bot.clients;
 
 import edu.java.bot.model.LinkResponse;
 import edu.java.bot.model.ListLinksResponse;
+import java.net.URI;
 
 public interface ScrapperClient {
 
-    String addChat(Integer id);
+    String addChat(Long id);
 
-    String deleteChat(Integer id);
+    String deleteChat(Long id);
 
-    ListLinksResponse getLinks(Integer id);
+    String setStatus(Long id, Long status);
 
-    LinkResponse addLink(Integer id);
+    Long getStatus(Long id);
 
-    LinkResponse deleteLink(Integer id);
+    ListLinksResponse getLinks(Long id);
+
+    LinkResponse addLink(Long id, URI url);
+
+    LinkResponse deleteLink(Long id, URI url);
 }

@@ -19,6 +19,7 @@ public class ApiExceptionsHandler {
     @ExceptionHandler
     public ApiErrorResponse handle(MethodArgumentNotValidException e) {
         log.error(ERROR + e.getMessage());
+
         return new ApiErrorResponse(
             "Некорректные параметры запроса",
             "400",
@@ -36,6 +37,19 @@ public class ApiExceptionsHandler {
             e.getMessage(),
             "404",
             "NotFound",
+            e.getMessage(),
+            Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toList()
+        );
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler
+    public ApiErrorResponse handle(AlreadyRegisteredChatException e) {
+        log.error(ERROR + e.getMessage());
+        return new ApiErrorResponse(
+            e.getMessage(),
+            "409",
+            "Conflict",
             e.getMessage(),
             Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toList()
         );
