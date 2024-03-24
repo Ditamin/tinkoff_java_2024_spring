@@ -24,7 +24,9 @@ public record ApplicationConfig(
 ) {
 
     @Bean
-    public TelegramBot telegramBot() {return new TelegramBot(telegramToken);}
+    public TelegramBot telegramBot() {
+        return new TelegramBot(telegramToken);
+    }
 
     @Bean
     public Command[] commands() {
@@ -40,6 +42,7 @@ public record ApplicationConfig(
     public CommandsHandler commandsHandler() {
         return new CommandsHandler(telegramBot(), commands());
     }
+
     @Bean
     public UpdateNoticeBot updateNoticeBot() {
         return new UpdateNoticeBot(telegramBot());

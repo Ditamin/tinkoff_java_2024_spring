@@ -32,14 +32,14 @@ public class ScrapperController {
     private final static String NOT_EXISTED_CHAT_MSG = "Чат не существует";
 
     @GetMapping("/tg-chat/{id}/status")
-    public Long getСhatStatus(@PathVariable("id") Long id) {
+    public Long getStatus(@PathVariable("id") Long id) {
         log.info("Запрос на получения статуса чата");
 
         return tgChatService.getStatus(id);
     }
 
     @PostMapping("/tg-chat/{id}/status/{status}")
-    public String changeСhatStatus(@PathVariable("id") Long id, @PathVariable("status") Long status) {
+    public String changeStatus(@PathVariable("id") Long id, @PathVariable("status") Long status) {
         log.info("Запрос на изменения статуса чата");
 
         tgChatService.setStatus(id, status);

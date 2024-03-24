@@ -3,10 +3,10 @@ package edu.java.bot.commands;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.clients.ScrapperClient;
 import edu.java.bot.model.LinkResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UntrackCommand implements Command {

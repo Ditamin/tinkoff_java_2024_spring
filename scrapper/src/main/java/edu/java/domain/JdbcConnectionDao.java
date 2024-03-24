@@ -63,6 +63,7 @@ public class JdbcConnectionDao {
         jdbcTemplate.update("DELETE FROM connections WHERE link = ?", linkId);
     }
 
+    @SuppressWarnings("MagicNumber")
     public List<Link> findAllLinks(Long chatId) {
         log.info("Поиск всех ссылок чата " + chatId);
 

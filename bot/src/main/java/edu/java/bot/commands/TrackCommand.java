@@ -1,12 +1,11 @@
 package edu.java.bot.commands;
 
-import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.clients.ScrapperClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class TrackCommand implements Command {

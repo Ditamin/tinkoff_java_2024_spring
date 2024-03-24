@@ -1,7 +1,7 @@
 package edu.java.bot.model;
 
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
 import java.net.URI;
+import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
 
 public record AddLinkRequest(
     @NotBlank

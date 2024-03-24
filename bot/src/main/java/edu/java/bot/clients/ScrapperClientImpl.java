@@ -4,15 +4,13 @@ import edu.java.bot.model.AddLinkRequest;
 import edu.java.bot.model.LinkResponse;
 import edu.java.bot.model.ListLinksResponse;
 import edu.java.bot.model.RemoveLinkRequest;
-import io.swagger.v3.oas.models.security.SecurityScheme;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
-import java.net.URI;
 
 @Service
 public class ScrapperClientImpl implements ScrapperClient {
@@ -21,6 +19,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     private final static String TG_CHAT_URI = "/tg-chat/{id}";
     private final static String LINKS_URI = "/links";
     private final static String STATUS = "/status";
+    private final static String TG_CHAT_HEADER = "Tg-Chat-Id";
 
     @Value("${scrapper.baseUrl}")
     String baseUrl;
@@ -74,7 +73,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     public ListLinksResponse getLinks(Long id) {
         return client.get()
             .uri(baseUrl + LINKS_URI)
-            .header("Tg-Chat-Id", id.toString())
+            .header(TG_CHAT_HEADER, id.toString())
             .retrieve()
             .bodyToMono(ListLinksResponse.class)
             .block();
@@ -84,7 +83,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     public LinkResponse addLink(Long id, URI url) {
         return client.post()
             .uri(baseUrl + LINKS_URI)
-            .header("Tg-Chat-Id", id.toString())
+            .header(TG_CHAT_HEADER, id.toString())
             .body(Mono.just(new AddLinkRequest(url)), AddLinkRequest.class)
             .retrieve()
             .bodyToMono(LinkResponse.class)
@@ -97,7 +96,7 @@ public class ScrapperClientImpl implements ScrapperClient {
             return client
                 .method(HttpMethod.DELETE)
                 .uri(baseUrl + LINKS_URI)
-                .header("Tg-Chat-Id", id.toString())
+                .header(TG_CHAT_HEADER, id.toString())
                 .body(Mono.just(new RemoveLinkRequest(url)), RemoveLinkRequest.class)
                 .retrieve()
                 .bodyToMono(LinkResponse.class)

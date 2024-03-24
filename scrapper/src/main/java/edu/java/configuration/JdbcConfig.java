@@ -15,12 +15,14 @@ public class JdbcConfig {
     @Value("${db.baseUrl}")
     String baseUrl;
 
+    private final static String USERNAME = "postgres";
+
     @Bean
     public DataSource dataSource() {
         return DataSourceBuilder.create()
             .url(baseUrl)
-            .username("postgres")
-            .password("postgres")
+            .username(USERNAME)
+            .password(USERNAME)
             .build();
     }
 

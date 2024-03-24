@@ -10,6 +10,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class StackOverflowClientImpl implements StackOverflowClient {
 
     private final WebClient client;
+    private final static String URL_SCHEME = "https";
+    private final static String URL_HOST = "api.stackexchange.com";
+    private final static String URL_VERSION = "2.3";
+    private final static String URL_PARAM_QUESTIONS = "questions";
 
     @Value("${stackoverflow.baseUrl}")
     String baseUrl;
@@ -30,9 +34,9 @@ public class StackOverflowClientImpl implements StackOverflowClient {
     public StackOverFlowResponse fetchUpdates(Long questionId) {
         int commentCount = client.get()
             .uri(uriBuilder -> uriBuilder
-                .scheme("https")
-                .host("api.stackexchange.com")
-                .pathSegment("2.3", "questions", questionId.toString(), "comments")
+                .scheme(URL_SCHEME)
+                .host(URL_HOST)
+                .pathSegment(URL_VERSION, URL_PARAM_QUESTIONS, questionId.toString(), "comments")
                 .queryParam(SITE, SITE_NAME)
                 .build())
             .retrieve()
@@ -43,9 +47,9 @@ public class StackOverflowClientImpl implements StackOverflowClient {
 
         StackOverFlowResult response = client.get()
             .uri(uriBuilder -> uriBuilder
-                .scheme("https")
-                .host("api.stackexchange.com")
-                .pathSegment("2.3", "questions", questionId.toString())
+                .scheme(URL_SCHEME)
+                .host(URL_HOST)
+                .pathSegment(URL_VERSION, URL_PARAM_QUESTIONS, questionId.toString())
                 .queryParam(SITE, SITE_NAME)
                 .build())
             .retrieve()

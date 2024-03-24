@@ -1,8 +1,6 @@
 package edu.java.bot.controller;
 
-import edu.java.bot.UpdateNoticeBot;
 import edu.java.bot.commands.CommandsHandler;
-import edu.java.bot.exceptions.AlreadyExistedLinkException;
 import edu.java.bot.model.LinkUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
