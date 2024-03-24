@@ -44,8 +44,8 @@ public class JdbcLinkUpdater implements LinkUpdater {
 
     void gitHubHandler(Link link) {
         String[] args = link.url().getPath().split("/");
-        String user = args[0];
-        String repo = args[1];
+        String user = args[1];
+        String repo = args[2];
 
         try {
             GitHubResponse response = gitHubClient.fetchUpdates(user, repo);
@@ -73,9 +73,16 @@ public class JdbcLinkUpdater implements LinkUpdater {
 
     void stackOverflowHandler(Link link) {
         String[] args = link.url().getPath().split("/");
-        Long questionId = Long.parseLong(args[0]);
+        Long questionId = Long.parseLong(args[2]);
 
         StackOverFlowResponse response = stackOverflowClient.fetchUpdates(questionId);
+
+        Link newLink = new Link(
+            link.id(),
+            link.url(),
+            response.item().getFirst().lastUpdate(),
+            response.item().getFirst().answerCount(),
+            response.commentAmount());
 
         if (response.item().getFirst().lastUpdate().isAfter(link.updatedAt())) {
             String msg = "Появилось новое изменение в вопросе на StackOverflow с темой "
@@ -91,16 +98,10 @@ public class JdbcLinkUpdater implements LinkUpdater {
                     + response.item().getFirst().name();
             }
 
-            Link newLink = new Link(
-                link.id(),
-                link.url(),
-                response.item().getFirst().lastUpdate(),
-                response.item().getFirst().answerCount(),
-                response.commentAmount());
-
-            linkDao.update(newLink);
             noticeBotClient(newLink, msg);
         }
+
+        linkDao.update(newLink);
     }
 
     void noticeBotClient(Link link, String msg) {

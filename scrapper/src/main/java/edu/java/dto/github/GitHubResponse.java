@@ -10,7 +10,7 @@ public record GitHubResponse(
     @JsonProperty("owner")
     GitHubUser author,
     String name,
-    @JsonProperty("updatedAt")
+    @JsonProperty("updated_at")
     OffsetDateTime lastUpdate
 ) {
 }

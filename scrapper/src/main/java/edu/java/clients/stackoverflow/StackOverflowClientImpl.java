@@ -20,17 +20,19 @@ public class StackOverflowClientImpl implements StackOverflowClient {
 
     public StackOverflowClientImpl(String baseUrl) {
         this.baseUrl = baseUrl;
-        client = WebClient.builder().baseUrl(baseUrl).build();
+        client = WebClient.builder().build();
     }
 
-    private static final String SITE = "SITE";
+    private static final String SITE = "site";
     private static final String SITE_NAME = "stackoverflow";
 
     @Override
     public StackOverFlowResponse fetchUpdates(Long questionId) {
         int commentCount = client.get()
             .uri(uriBuilder -> uriBuilder
-                .path(String.format("/questions/%s/comments", questionId))
+                .scheme("https")
+                .host("api.stackexchange.com")
+                .pathSegment("2.3", "questions", questionId.toString(), "comments")
                 .queryParam(SITE, SITE_NAME)
                 .build())
             .retrieve()
@@ -41,7 +43,9 @@ public class StackOverflowClientImpl implements StackOverflowClient {
 
         StackOverFlowResult response = client.get()
             .uri(uriBuilder -> uriBuilder
-                .path(String.format("/questions/%s", questionId))
+                .scheme("https")
+                .host("api.stackexchange.com")
+                .pathSegment("2.3", "questions", questionId.toString())
                 .queryParam(SITE, SITE_NAME)
                 .build())
             .retrieve()

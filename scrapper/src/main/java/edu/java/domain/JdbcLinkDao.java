@@ -87,7 +87,7 @@ public class JdbcLinkDao {
             link.updatedAt(), link.answerAmount(), link.id());
     }
 
-    private final int linkLimit = 1;
+    private final int linkLimit = 2;
 
     @SuppressWarnings("MagicNumber")
     public List<Link> findDeprecated() {
