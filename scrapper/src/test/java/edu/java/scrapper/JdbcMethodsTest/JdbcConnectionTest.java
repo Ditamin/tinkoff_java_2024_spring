@@ -1,13 +1,12 @@
 package edu.java.scrapper.JdbcMethodsTest;
 
-import edu.java.domain.JdbcConnectionDao;
-import edu.java.domain.JdbcLinkDao;
+import edu.java.domain.jdbc.JdbcConnectionDao;
+import edu.java.domain.jdbc.JdbcLinkDao;
 import edu.java.model.Link;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;

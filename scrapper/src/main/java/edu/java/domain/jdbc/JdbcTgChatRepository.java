@@ -1,4 +1,4 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
 import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;

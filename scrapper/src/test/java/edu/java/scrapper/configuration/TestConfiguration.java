@@ -1,18 +1,7 @@
 package edu.java.scrapper.configuration;
 
-import edu.java.clients.bot.BotClientImpl;
-import edu.java.clients.github.GitHubClientImpl;
-import edu.java.clients.stackoverflow.StackOverflowClientImpl;
-import edu.java.domain.JdbcConnectionDao;
-import edu.java.domain.JdbcLinkDao;
-import edu.java.domain.JdbcTgChatRepository;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.core.JdbcTemplate;
-import javax.sql.DataSource;
-import static edu.java.scrapper.IntegrationTest.POSTGRES;
 
 @Configuration
 @Profile("test")

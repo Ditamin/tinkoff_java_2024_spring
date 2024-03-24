@@ -1,8 +1,8 @@
 package edu.java.configuration;
 
-import edu.java.domain.JdbcConnectionDao;
-import edu.java.domain.JdbcLinkDao;
-import edu.java.domain.JdbcTgChatRepository;
+import edu.java.domain.jdbc.JdbcConnectionDao;
+import edu.java.domain.jdbc.JdbcLinkDao;
+import edu.java.domain.jdbc.JdbcTgChatRepository;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;

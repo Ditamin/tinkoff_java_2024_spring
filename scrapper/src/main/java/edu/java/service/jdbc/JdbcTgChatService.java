@@ -1,6 +1,6 @@
 package edu.java.service.jdbc;
 
-import edu.java.domain.JdbcTgChatRepository;
+import edu.java.domain.jdbc.JdbcTgChatRepository;
 import edu.java.exceptions.AlreadyRegisteredChatException;
 import edu.java.service.TgChatService;
 import lombok.extern.slf4j.Slf4j;

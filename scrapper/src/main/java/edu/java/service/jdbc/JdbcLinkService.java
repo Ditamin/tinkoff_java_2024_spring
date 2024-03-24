@@ -1,8 +1,8 @@
 package edu.java.service.jdbc;
 
-import edu.java.domain.JdbcConnectionDao;
-import edu.java.domain.JdbcLinkDao;
-import edu.java.domain.JdbcTgChatRepository;
+import edu.java.domain.jdbc.JdbcConnectionDao;
+import edu.java.domain.jdbc.JdbcLinkDao;
+import edu.java.domain.jdbc.JdbcTgChatRepository;
 import edu.java.model.Link;
 import edu.java.service.LinkService;
 import java.net.URI;
