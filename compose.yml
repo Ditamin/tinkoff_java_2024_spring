@@ -20,8 +20,8 @@ services:
       - --changelog-file=master.xml
       - --driver=org.postgresql.Driver
       - --url=jdbc:postgresql://postgresql:5432/scrapper
-      - --username=admin
-      - --password=admin
+      - --username=postgres
+      - --password=postgres
       - update
     volumes:
       - ./migrations:/liquibase/changelog

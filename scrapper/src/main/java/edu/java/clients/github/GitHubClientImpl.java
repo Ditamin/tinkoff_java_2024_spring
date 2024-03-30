@@ -26,7 +26,7 @@ public class GitHubClientImpl implements GitHubClient {
     @Override
     public GitHubResponse fetchUpdates(String user, String repository) throws URISyntaxException {
         return client.get()
-            .uri("/repos/{user}/{repo}", user, repository)
+            .uri(baseUrl + "/repos/{user}/{repo}", user, repository)
             .retrieve()
             .bodyToMono(GitHubResponse.class)
             .block();
