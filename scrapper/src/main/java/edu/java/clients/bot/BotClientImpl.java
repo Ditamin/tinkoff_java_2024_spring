@@ -1,12 +1,11 @@
 package edu.java.clients.bot;
 
 
-import edu.java.model.LinkUpdateRequest;
-import java.net.URI;
+import edu.java.model.requests.LinkUpdateRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 public class BotClientImpl implements BotClient {
@@ -28,8 +27,8 @@ public class BotClientImpl implements BotClient {
     @Override
     public String sendUpdateLink(LinkUpdateRequest linkUpdateRequest) {
         return client.post()
-            .uri(URI.create("/updates"))
-            .body(BodyInserters.fromValue(linkUpdateRequest))
+            .uri(baseUrl + "/updates")
+            .body(Mono.just(linkUpdateRequest), LinkUpdateRequest.class)
             .retrieve()
             .bodyToMono(String.class)
             .block();

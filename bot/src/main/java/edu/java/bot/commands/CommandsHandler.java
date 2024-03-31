@@ -7,30 +7,37 @@ import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.SendResponse;
+import edu.java.bot.clients.ScrapperClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommandsHandler {
-    private final TelegramBot bot;
+    @Autowired
+    TelegramBot bot;
+    @Autowired
+    TrackCommand trackCommand;
+    @Autowired
+    UntrackCommand untrackCommand;
+    @Autowired
+    ScrapperClient scrapperClient;
+
     @Getter
-    static Command[] commands;
+    @Autowired
+    Command[] commands;
+
     private final static String UNKNOWN_CMD = "Неизвестная команда. Введите /help для просмотра доступных команд";
+    private final static Long TRACK_STATUS = 1L;
+    private final static Long UNTRACK_STATUS = 2L;
 
-    public CommandsHandler(TelegramBot bot) {
-        this.bot = bot;
-        addCommands();
+    public CommandsHandler(TelegramBot telegramBot, Command[] commands) {
+        this.bot = telegramBot;
+        this.commands = commands;
         addCommandMenu();
-    }
-
-    private void addCommands() {
-        commands = new Command[] {
-            new StartCommand(),
-            new HelpCommand(),
-            new TrackCommand(),
-            new UntrackCommand(),
-            new ListCommand() };
     }
 
     private void addCommandMenu() {
@@ -71,8 +78,8 @@ public class CommandsHandler {
     public SendResponse handle(Update update) {
         if (update != null && update.message() != null && update.message().text() != null) {
             String response = makeResponse(update);
-            SendMessage request = makeRequest(update, response);
-            return bot.execute(request);
+            Long chatId = update.message().chat().id();
+            return sendMessage(chatId, response);
         }
 
         return null;
@@ -80,21 +87,36 @@ public class CommandsHandler {
 
     public String makeResponse(Update update) {
         String incomingCommand = update.message().text().split(" ")[0];
+        Long chatId = update.message().chat().id();
 
         for (Command command : commands) {
             if (Objects.equals(incomingCommand, command.getName())) {
-                return command.handle();
+                scrapperClient.setStatus(chatId, 0L);
+                return command.handle(update);
             }
+        }
+
+        Long status = scrapperClient.getStatus(chatId);
+
+        if (status.equals(TRACK_STATUS)) {
+            return trackCommand.trackLink(update);
+        }
+
+        if (status.equals(UNTRACK_STATUS)) {
+            return untrackCommand.untrackLink(update);
         }
 
         return UNKNOWN_CMD;
     }
 
-    public SendMessage makeRequest(Update update, String response) {
-        return new SendMessage(update.message().chat().id(), response)
+    public SendMessage makeRequest(Long chatId, String response) {
+        return new SendMessage(chatId, response)
             .parseMode(ParseMode.HTML)
             .disableWebPagePreview(true)
-            .disableNotification(true)
-            .replyToMessageId(update.message().messageId());
+            .disableNotification(true);
+    }
+
+    public SendResponse sendMessage(Long chatId, String msg) {
+        return bot.execute(makeRequest(chatId, msg));
     }
 }

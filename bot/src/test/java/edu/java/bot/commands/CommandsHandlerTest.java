@@ -14,13 +14,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class CommandsHandlerTest {
-    UpdateNoticeBot bot = new UpdateNoticeBot(System.getenv("TELEGRAMBOT_TOKEN"));
+    UpdateNoticeBot bot = new UpdateNoticeBot(new TelegramBot("TELEGRAMBOT_TOKEN"));
     TelegramBot telegramBot = mock(TelegramBot.class);
     Update update = mock(Update.class);
     Message message = mock(Message.class);
     Chat chat = mock(Chat.class);
     Long chatId = 1L; //1781258823L;
-    CommandsHandler commandsHandler = new CommandsHandler(telegramBot);
+    CommandsHandler commandsHandler = new CommandsHandler(telegramBot, null);
 
     @BeforeEach
     void setUp() {
