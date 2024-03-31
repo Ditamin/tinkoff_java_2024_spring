@@ -19,12 +19,18 @@ logging:
 
 github:
   baseUrl: "https://api.github.com"
+  retryAmount: 5
+  policy: linear
 
 stackoverflow:
   baseUrl: "https://api.stackexchange.com/2.3"
+  retryAmount: 5
+  policy: linear
 
 bot:
   baseUrl: "http://localhost:8090"
+  retryAmount: 5
+  policy: linear
 
 db:
   username: "postgres"

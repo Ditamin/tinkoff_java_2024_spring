@@ -13,6 +13,8 @@ public class GitHubClientImpl implements GitHubClient {
 
     @Value("${github.baseUrl}")
     String baseUrl;
+    @Value("${github.retryAmount")
+    int retryAmount;
 
     public GitHubClientImpl() {
         client = WebClient.builder().baseUrl(baseUrl).build();
@@ -30,5 +32,20 @@ public class GitHubClientImpl implements GitHubClient {
             .retrieve()
             .bodyToMono(GitHubResponse.class)
             .block();
+    }
+
+
+    public GitHubResponse tryFetchUpdates(String user, String repository) throws URISyntaxException {
+        int attempts = 1;
+
+        while (attempts < retryAmount) {
+            try {
+                return fetchUpdates(user, repository);
+            } catch (Exception e) {
+                ++attempts;
+            }
+        }
+
+        return fetchUpdates(user, repository);
     }
 }

@@ -1,10 +1,12 @@
 package edu.java.clients.stackoverflow;
 
+import edu.java.dto.github.GitHubResponse;
 import edu.java.dto.stackoveflow.StackOverFlowResponse;
 import edu.java.dto.stackoveflow.StackOverFlowResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import java.net.URISyntaxException;
 
 @Component
 public class StackOverflowClientImpl implements StackOverflowClient {
@@ -17,6 +19,8 @@ public class StackOverflowClientImpl implements StackOverflowClient {
 
     @Value("${stackoverflow.baseUrl}")
     String baseUrl;
+    @Value("${stackoverflow.retryAmount")
+    int retryAmount;
 
     public StackOverflowClientImpl() {
         client = WebClient.builder().baseUrl(baseUrl).build();
@@ -57,5 +61,19 @@ public class StackOverflowClientImpl implements StackOverflowClient {
             .block();
 
         return new StackOverFlowResponse(response.item(), (long) commentCount);
+    }
+
+    public StackOverFlowResponse tryFetchUpdates(Long questionId) throws URISyntaxException {
+        int attempts = 1;
+
+        while (attempts < retryAmount) {
+            try {
+                return fetchUpdates(questionId);
+            } catch (Exception e) {
+                ++attempts;
+            }
+        }
+
+        return fetchUpdates(questionId);
     }
 }
