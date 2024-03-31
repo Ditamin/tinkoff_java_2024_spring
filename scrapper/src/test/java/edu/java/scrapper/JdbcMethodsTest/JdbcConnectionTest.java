@@ -2,7 +2,7 @@ package edu.java.scrapper.JdbcMethodsTest;
 
 import edu.java.domain.jdbc.JdbcConnectionDao;
 import edu.java.domain.jdbc.JdbcLinkDao;
-import edu.java.model.Link;
+import edu.java.model.entity.Link;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class JdbcConnectionTest {
     @Rollback
     void addTest() {
         Long chatId = 1L;
-        Long linkId = 2L;
+        Integer linkId = 2;
 
         connectionDao.add(chatId, linkId);
         Long chatRes = jdbcTemplate.queryForObject("SELECT chat FROM connections", Long.class);
@@ -44,7 +44,7 @@ public class JdbcConnectionTest {
     @Rollback
     void removeTest() {
         Long chatId = 1L;
-        Long linkId = 2L;
+        Integer linkId = 2;
 
         connectionDao.add(chatId, linkId);
         connectionDao.delete(chatId, linkId);
@@ -58,8 +58,8 @@ public class JdbcConnectionTest {
     @Rollback
     void removeAllLinksTest() {
         Long chatId = 1L;
-        Long link1Id = 1L;
-        Long link2Id = 2L;
+        Integer link1Id = 1;
+        Integer link2Id = 2;
 
         connectionDao.add(chatId, link1Id);
         connectionDao.add(chatId, link2Id);
@@ -75,7 +75,7 @@ public class JdbcConnectionTest {
     void removeAllChatsTest() {
         Long chat1Id = 1L;
         Long chat2Id = 2L;
-        Long linkId = 1L;
+        Integer linkId = 1;
 
         connectionDao.add(chat1Id, linkId);
         connectionDao.add(chat2Id, linkId);
@@ -95,8 +95,8 @@ public class JdbcConnectionTest {
 
         Link link1 = linkDao.add(url1);
         Link link2 = linkDao.add(url2);
-        connectionDao.add(chatId, link1.id());
-        connectionDao.add(chatId, link2.id());
+        connectionDao.add(chatId, link1.getLinkId());
+        connectionDao.add(chatId, link2.getLinkId());
         List<Link> all = connectionDao.findAllLinks(chatId);
 
         Assertions.assertThat(all.size()).isEqualTo(2);
@@ -108,7 +108,7 @@ public class JdbcConnectionTest {
     void findAllChatsTest() {
         Long chat1Id = 1L;
         Long chat2Id = 2L;
-        Long linkId = 1L;
+        Integer linkId = 1;
 
         connectionDao.add(chat1Id, linkId);
         connectionDao.add(chat2Id, linkId);

@@ -4,31 +4,20 @@ import edu.java.domain.jdbc.JdbcConnectionDao;
 import edu.java.domain.jdbc.JdbcLinkDao;
 import edu.java.domain.jdbc.JdbcTgChatRepository;
 import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
 public class JdbcConfig {
-    @Value("${db.baseUrl}")
-    String baseUrl;
 
-    private final static String USERNAME = "postgres";
-
-    @Bean
-    public DataSource dataSource() {
-        return DataSourceBuilder.create()
-            .url(baseUrl)
-            .username(USERNAME)
-            .password(USERNAME)
-            .build();
-    }
+    @Autowired
+    DataSource dataSource;
 
     @Bean
     public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
+        return new JdbcTemplate(dataSource);
     }
 
     @Bean

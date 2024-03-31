@@ -1,6 +1,6 @@
 package edu.java.exceptions;
 
-import edu.java.model.ApiErrorResponse;
+import edu.java.model.response.ApiErrorResponse;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;

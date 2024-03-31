@@ -7,8 +7,8 @@ import edu.java.domain.jdbc.JdbcConnectionDao;
 import edu.java.domain.jdbc.JdbcLinkDao;
 import edu.java.dto.github.GitHubResponse;
 import edu.java.dto.stackoveflow.StackOverFlowResponse;
-import edu.java.model.Link;
-import edu.java.model.LinkUpdateRequest;
+import edu.java.model.entity.Link;
+import edu.java.model.requests.LinkUpdateRequest;
 import edu.java.service.LinkUpdater;
 import java.net.URISyntaxException;
 import java.util.Objects;
@@ -31,10 +31,10 @@ public class JdbcLinkUpdater implements LinkUpdater {
     @Override
     public int update() {
         for (Link link : linkDao.findDeprecated()) {
-            if (Objects.equals(link.url().getHost(), "github.com")) {
+            if (Objects.equals(link.getUrl().getHost(), "github.com")) {
                 gitHubHandler(link);
 
-            } else if (Objects.equals(link.url().getHost(), "stackoverflow.com")) {
+            } else if (Objects.equals(link.getUrl().getHost(), "stackoverflow.com")) {
                 stackOverflowHandler(link);
             }
         }
@@ -43,23 +43,23 @@ public class JdbcLinkUpdater implements LinkUpdater {
     }
 
     void gitHubHandler(Link link) {
-        String[] args = link.url().getPath().split("/");
+        String[] args = link.getUrl().getPath().split("/");
         String user = args[1];
         String repo = args[2];
 
         try {
             GitHubResponse response = gitHubClient.fetchUpdates(user, repo);
 
-            if (response.lastUpdate().isAfter(link.updatedAt())) {
+            if (response.lastUpdate().isAfter(link.getUpdatedAt())) {
                 String msg = "Появилось новое изменение в репозитории "
                     + response.name() + " на GitHub у " + response.author().login();
 
                 Link newLink = new Link(
-                    link.id(),
-                    link.url(),
+                    link.getLinkId(),
+                    link.getUrl(),
                     response.lastUpdate(),
-                    link.answerAmount(),
-                    link.commentAmount()
+                    link.getAnswerCount(),
+                    link.getCommentCount()
                 );
 
                 linkDao.update(newLink);
@@ -72,28 +72,28 @@ public class JdbcLinkUpdater implements LinkUpdater {
     }
 
     void stackOverflowHandler(Link link) {
-        String[] args = link.url().getPath().split("/");
+        String[] args = link.getUrl().getPath().split("/");
         Long questionId = Long.parseLong(args[2]);
 
         StackOverFlowResponse response = stackOverflowClient.fetchUpdates(questionId);
 
         Link newLink = new Link(
-            link.id(),
-            link.url(),
+            link.getLinkId(),
+            link.getUrl(),
             response.item().getFirst().lastUpdate(),
             response.item().getFirst().answerCount(),
             response.commentAmount());
 
-        if (response.item().getFirst().lastUpdate().isAfter(link.updatedAt())) {
+        if (response.item().getFirst().lastUpdate().isAfter(link.getUpdatedAt())) {
             String msg = "Появилось новое изменение в вопросе на StackOverflow с темой "
                 + response.item().getFirst().name();
 
-            if (response.commentAmount() < link.commentAmount()) {
+            if (response.commentAmount() < link.getCommentCount()) {
                 msg = "Появился новый комментарий в вопросе на StackOverflow с темой "
                     + response.item().getFirst().name();
             }
 
-            if (response.item().getFirst().answerCount() < link.answerAmount()) {
+            if (response.item().getFirst().answerCount() < link.getAnswerCount()) {
                 msg = "Появился новый ответ в вопросе на StackOverflow с темой "
                     + response.item().getFirst().name();
             }
@@ -106,9 +106,9 @@ public class JdbcLinkUpdater implements LinkUpdater {
 
     void noticeBotClient(Link link, String msg) {
         botClient.sendUpdateLink(
-            new LinkUpdateRequest(link.id(),
-                link.url(),
+            new LinkUpdateRequest(link.getLinkId(),
+                link.getUrl(),
                 msg,
-                connectionDao.findAllChats(link.id())));
+                connectionDao.findAllChats(link.getLinkId())));
     }
 }

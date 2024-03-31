@@ -27,6 +27,8 @@ bot:
   baseUrl: "http://localhost:8090"
 
 db:
+  username: "postgres"
+  password: "postgres"
   baseUrl: "jdbc:postgresql://localhost:5432/scrapper"
 
 springdoc:

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS links (
-    id bigint PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     url varchar(2048) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT (timezone('utc', now())),
     answer_count bigint DEFAULT (100),
@@ -12,6 +12,6 @@ CREATE TABLE IF NOT EXISTS chats (
 );
 
 CREATE TABLE IF NOT EXISTS connections (
-    chat bigint NOT NULL,
-    link bigint NOT NULL
+    chat bigint REFERENCES chats(id) ON DELETE CASCADE,
+    link int REFERENCES links(id) ON DELETE CASCADE
 );

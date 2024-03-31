@@ -1,4 +1,4 @@
-package edu.java.model;
+package edu.java.model.requests;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -7,7 +7,7 @@ import java.util.List;
 
 public record LinkUpdateRequest(
     @NotNull
-    Long id,
+    Integer id,
     @NotNull
     URI url,
     String description,

@@ -1,11 +1,11 @@
 package edu.java.controller;
 
 import edu.java.exceptions.AlreadyRegisteredChatException;
-import edu.java.model.AddLinkRequest;
-import edu.java.model.Link;
-import edu.java.model.LinkResponse;
-import edu.java.model.ListLinksResponse;
-import edu.java.model.RemoveLinkRequest;
+import edu.java.model.requests.AddLinkRequest;
+import edu.java.model.entity.Link;
+import edu.java.model.response.LinkResponse;
+import edu.java.model.response.ListLinksResponse;
+import edu.java.model.requests.RemoveLinkRequest;
 import edu.java.service.jdbc.JdbcLinkService;
 import edu.java.service.jdbc.JdbcTgChatService;
 import jakarta.validation.Valid;
@@ -105,7 +105,7 @@ public class ScrapperController {
         }
 
 
-        return new LinkResponse(link.id(), link.url());
+        return new LinkResponse(link.getLinkId(), link.getUrl());
     }
 
     @DeleteMapping("/links")
@@ -122,6 +122,6 @@ public class ScrapperController {
             throw new NoSuchElementException(NOT_EXISTED_CHAT_MSG);
         }
 
-        return new LinkResponse(link.id(), link.url());
+        return new LinkResponse(link.getLinkId(), link.getUrl());
     }
 }

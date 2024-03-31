@@ -3,7 +3,7 @@ package edu.java.service.jdbc;
 import edu.java.domain.jdbc.JdbcConnectionDao;
 import edu.java.domain.jdbc.JdbcLinkDao;
 import edu.java.domain.jdbc.JdbcTgChatRepository;
-import edu.java.model.Link;
+import edu.java.model.entity.Link;
 import edu.java.service.LinkService;
 import java.net.URI;
 import java.util.List;
@@ -32,8 +32,8 @@ public class JdbcLinkService implements LinkService {
             link = linkDao.add(url);
         }
 
-        if (!connectionDao.find(chatId, link.id())) {
-            connectionDao.add(chatId, link.id());
+        if (!connectionDao.find(chatId, link.getLinkId())) {
+            connectionDao.add(chatId, link.getLinkId());
         }
 
         return link;
@@ -47,11 +47,11 @@ public class JdbcLinkService implements LinkService {
             throw new NoSuchElementException();
         }
 
-        if (!connectionDao.find(chatId, link.id())) {
+        if (!connectionDao.find(chatId, link.getLinkId())) {
             return null;
         }
 
-        connectionDao.delete(chatId, link.id());
+        connectionDao.delete(chatId, link.getLinkId());
         return link;
     }
 

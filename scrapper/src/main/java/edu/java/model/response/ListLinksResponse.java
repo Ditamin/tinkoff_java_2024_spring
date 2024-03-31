@@ -1,4 +1,6 @@
-package edu.java.model;
+package edu.java.model.response;
+
+import edu.java.model.entity.Link;
 
 import java.util.List;
 

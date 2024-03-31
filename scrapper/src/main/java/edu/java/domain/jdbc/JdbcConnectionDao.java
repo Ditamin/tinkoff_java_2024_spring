@@ -1,6 +1,6 @@
 package edu.java.domain.jdbc;
 
-import edu.java.model.Link;
+import edu.java.model.entity.Link;
 import java.net.URI;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -27,14 +27,14 @@ public class JdbcConnectionDao {
     }
 
     @Transactional
-    public void add(Long chatId, Long linkId) {
+    public void add(Long chatId, Integer linkId) {
         log.info("Добавление ссылки " + linkId + " к чату " + chatId);
 
         jdbcTemplate.update("INSERT INTO connections (chat, link) values (?, ?)", chatId, linkId);
     }
 
     @Transactional
-    public void delete(Long chatId, Long linkId) {
+    public void delete(Long chatId, Integer linkId) {
         log.info("Удаление " + linkId + " из чата " + chatId);
 
         jdbcTemplate.update("DELETE FROM connections WHERE chat = ? AND link = ?", chatId, linkId);
@@ -57,7 +57,7 @@ public class JdbcConnectionDao {
     }
 
     @Transactional
-    public void deleteAllChats(Long linkId) {
+    public void deleteAllChats(Integer linkId) {
         log.info("Удаление всех связей чатов с ссылкой " + linkId);
 
         jdbcTemplate.update("DELETE FROM connections WHERE link = ?", linkId);
@@ -79,7 +79,7 @@ public class JdbcConnectionDao {
         return jdbcTemplate.query(String.format("SELECT * FROM links WHERE id IN (%s)", inSql),
             linksId.toArray(),
             (resultSet, rowNum) -> new Link(
-                resultSet.getLong(1),
+                resultSet.getInt(1),
                 URI.create(resultSet.getString(2)),
                 OffsetDateTime.ofInstant(
                     Instant.ofEpochMilli(resultSet.getTimestamp(3).getTime()),
@@ -88,13 +88,13 @@ public class JdbcConnectionDao {
                 resultSet.getLong(5)));
     }
 
-    public List<Long> findAllChats(Long linkId) {
+    public List<Long> findAllChats(Integer linkId) {
         log.info("Поиск всех чатов с ссылкой " + linkId);
 
         return jdbcTemplate.queryForList("SELECT chat FROM connections WHERE link = ?", Long.class, linkId);
     }
 
-    public boolean find(Long chatId, Long linkId) {
+    public boolean find(Long chatId, Integer linkId) {
         log.info("Поиск связи ссылки " + linkId + " и чата = " + chatId);
 
         Integer amount = jdbcTemplate
