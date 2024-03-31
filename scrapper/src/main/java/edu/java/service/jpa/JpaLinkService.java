@@ -6,13 +6,13 @@ import edu.java.exceptions.AlreadyAddedLinkException;
 import edu.java.model.entity.Chat;
 import edu.java.model.entity.Link;
 import edu.java.service.LinkService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.Collection;
 import java.util.NoSuchElementException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-//@Service
+@Service
 public class JpaLinkService implements LinkService {
     @Autowired
     JpaLinkDao linkDao;

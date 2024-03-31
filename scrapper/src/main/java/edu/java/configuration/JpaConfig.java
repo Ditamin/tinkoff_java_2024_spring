@@ -2,13 +2,13 @@ package edu.java.configuration;
 
 import edu.java.service.jpa.JpaLinkService;
 import edu.java.service.jpa.JpaTgChatService;
+import java.util.Properties;
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import javax.sql.DataSource;
-import java.util.Properties;
 
 @Configuration
 public class JpaConfig {

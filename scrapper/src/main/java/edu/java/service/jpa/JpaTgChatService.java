@@ -1,13 +1,12 @@
 package edu.java.service.jpa;
 
-import edu.java.domain.jpa.JpaLinkDao;
 import edu.java.domain.jpa.JpaTgChatRepository;
 import edu.java.exceptions.AlreadyRegisteredChatException;
 import edu.java.model.entity.Chat;
 import edu.java.service.TgChatService;
+import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.NoSuchElementException;
 
 @Service
 public class JpaTgChatService implements TgChatService {

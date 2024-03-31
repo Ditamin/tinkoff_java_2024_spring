@@ -1,7 +1,6 @@
 package edu.java.domain.jdbc;
 
 import java.util.NoSuchElementException;
-import edu.java.domain.jdbc.JdbcConnectionDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
