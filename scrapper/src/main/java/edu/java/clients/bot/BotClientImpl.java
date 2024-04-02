@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import java.net.URISyntaxException;
+import java.util.Objects;
+import static java.lang.Math.min;
 
 @Service
 public class BotClientImpl implements BotClient {
@@ -16,7 +18,7 @@ public class BotClientImpl implements BotClient {
 
     @Value("${bot.baseUrl}")
     String baseUrl;
-    @Value("${bot.retryAmount")
+    @Value("${bot.retryAmount}")
     int retryAmount;
 
     public BotClientImpl() {
@@ -38,17 +40,38 @@ public class BotClientImpl implements BotClient {
             .block();
     }
 
-    public String trySendUpdateLink(LinkUpdateRequest linkUpdateRequest) {
+    @Value("${bot.policy}")
+    String policy;
+
+    private final static int MIN_DELAY = 100;
+    private final static int MAX_DELAY = 1000_000;
+    private final static int FACTOR = 2;
+
+    public String trySendUpdateLink(LinkUpdateRequest linkUpdateRequest) throws InterruptedException {
         int attempts = 1;
+        int delay = MIN_DELAY;
 
         while (attempts < retryAmount) {
             try {
                 return sendUpdateLink(linkUpdateRequest);
             } catch (Exception e) {
                 ++attempts;
+                Thread.sleep(getDelay(delay));
             }
         }
 
         return sendUpdateLink(linkUpdateRequest);
+    }
+
+    private int getDelay(int delay) {
+        if (Objects.equals(policy, "linear")) {
+            delay = min(delay + MIN_DELAY, MAX_DELAY);
+        }
+
+        if (Objects.equals(policy, "exponent")) {
+            delay = min(delay * FACTOR, MAX_DELAY);
+        }
+
+        return delay;
     }
 }

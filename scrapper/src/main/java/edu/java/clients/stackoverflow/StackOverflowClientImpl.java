@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import java.net.URISyntaxException;
+import java.util.Objects;
+import static java.lang.Math.min;
 
 @Component
 public class StackOverflowClientImpl implements StackOverflowClient {
@@ -19,8 +21,14 @@ public class StackOverflowClientImpl implements StackOverflowClient {
 
     @Value("${stackoverflow.baseUrl}")
     String baseUrl;
-    @Value("${stackoverflow.retryAmount")
+    @Value("${stackoverflow.retryAmount}")
     int retryAmount;
+    @Value("${stackoverflow.policy}")
+    String policy;
+
+    private final static int MIN_DELAY = 100;
+    private final static int MAX_DELAY = 1000_000;
+    private final static int FACTOR = 2;
 
     public StackOverflowClientImpl() {
         client = WebClient.builder().baseUrl(baseUrl).build();
@@ -63,17 +71,31 @@ public class StackOverflowClientImpl implements StackOverflowClient {
         return new StackOverFlowResponse(response.item(), (long) commentCount);
     }
 
-    public StackOverFlowResponse tryFetchUpdates(Long questionId) throws URISyntaxException {
+    public StackOverFlowResponse tryFetchUpdates(Long questionId) throws InterruptedException {
         int attempts = 1;
+        int delay = MIN_DELAY;
 
         while (attempts < retryAmount) {
             try {
                 return fetchUpdates(questionId);
             } catch (Exception e) {
                 ++attempts;
+                Thread.sleep(getDelay(delay));
             }
         }
 
         return fetchUpdates(questionId);
+    }
+
+    private int getDelay(int delay) {
+        if (Objects.equals(policy, "linear")) {
+            delay = min(delay + MIN_DELAY, MAX_DELAY);
+        }
+
+        if (Objects.equals(policy, "exponent")) {
+            delay = min(delay * FACTOR, MAX_DELAY);
+        }
+
+        return delay;
     }
 }
