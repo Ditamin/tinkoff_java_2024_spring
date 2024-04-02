@@ -42,8 +42,7 @@ public class StackOverflowClientImpl implements StackOverflowClient {
     private static final String SITE = "site";
     private static final String SITE_NAME = "stackoverflow";
 
-    @Override
-    public StackOverFlowResponse fetchUpdates(Long questionId) {
+    public StackOverFlowResponse tryFetchUpdates(Long questionId) {
         int commentCount = client.get()
             .uri(uriBuilder -> uriBuilder
                 .scheme(URL_SCHEME)
@@ -71,14 +70,15 @@ public class StackOverflowClientImpl implements StackOverflowClient {
         return new StackOverFlowResponse(response.item(), (long) commentCount);
     }
 
-    public StackOverFlowResponse tryFetchUpdates(Long questionId) throws InterruptedException {
+    @Override
+    public StackOverFlowResponse fetchUpdates(Long questionId) throws InterruptedException {
         if (enableRetry) {
             int attempts = 1;
             int delay = MIN_DELAY;
 
             while (attempts < retryAmount) {
                 try {
-                    return fetchUpdates(questionId);
+                    return tryFetchUpdates(questionId);
                 } catch (Exception e) {
                     ++attempts;
                     Thread.sleep(getDelay(delay));
@@ -86,7 +86,7 @@ public class StackOverflowClientImpl implements StackOverflowClient {
             }
         }
 
-        return fetchUpdates(questionId);
+        return tryFetchUpdates(questionId);
     }
 
     private int getDelay(int delay) {

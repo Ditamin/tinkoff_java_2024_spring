@@ -27,8 +27,7 @@ public class BotClientImpl implements BotClient {
         client = WebClient.builder().baseUrl(baseUrl).build();
     }
 
-    @Override
-    public String sendUpdateLink(LinkUpdateRequest linkUpdateRequest) {
+    public String trySendUpdateLink(LinkUpdateRequest linkUpdateRequest) {
         return client.post()
             .uri(baseUrl + "/updates")
             .body(Mono.just(linkUpdateRequest), LinkUpdateRequest.class)
@@ -46,14 +45,15 @@ public class BotClientImpl implements BotClient {
     private final static int MAX_DELAY = 1000_000;
     private final static int FACTOR = 2;
 
-    public String trySendUpdateLink(LinkUpdateRequest linkUpdateRequest) throws InterruptedException {
+    @Override
+    public String sendUpdateLink(LinkUpdateRequest linkUpdateRequest) throws InterruptedException {
         if (enableRetry) {
             int attempts = 1;
             int delay = MIN_DELAY;
 
             while (attempts < retryAmount) {
                 try {
-                    return sendUpdateLink(linkUpdateRequest);
+                    return trySendUpdateLink(linkUpdateRequest);
                 } catch (Exception e) {
                     ++attempts;
                     Thread.sleep(getDelay(delay));
@@ -61,7 +61,7 @@ public class BotClientImpl implements BotClient {
             }
         }
 
-        return sendUpdateLink(linkUpdateRequest);
+        return trySendUpdateLink(linkUpdateRequest);
     }
 
     private int getDelay(int delay) {
