@@ -1,14 +1,11 @@
 package edu.java.clients.bot;
 
-
-import edu.java.dto.github.GitHubResponse;
 import edu.java.model.requests.LinkUpdateRequest;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import java.net.URISyntaxException;
-import java.util.Objects;
 import static java.lang.Math.min;
 
 @Service
@@ -64,14 +61,16 @@ public class BotClientImpl implements BotClient {
     }
 
     private int getDelay(int delay) {
+        int newDelay = delay;
+
         if (Objects.equals(policy, "linear")) {
-            delay = min(delay + MIN_DELAY, MAX_DELAY);
+            newDelay = min(delay + MIN_DELAY, MAX_DELAY);
         }
 
         if (Objects.equals(policy, "exponent")) {
-            delay = min(delay * FACTOR, MAX_DELAY);
+            newDelay = min(delay * FACTOR, MAX_DELAY);
         }
 
-        return delay;
+        return newDelay;
     }
 }

@@ -1,13 +1,11 @@
 package edu.java.clients.stackoverflow;
 
-import edu.java.dto.github.GitHubResponse;
 import edu.java.dto.stackoveflow.StackOverFlowResponse;
 import edu.java.dto.stackoveflow.StackOverFlowResult;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import java.net.URISyntaxException;
-import java.util.Objects;
 import static java.lang.Math.min;
 
 @Component
@@ -88,14 +86,16 @@ public class StackOverflowClientImpl implements StackOverflowClient {
     }
 
     private int getDelay(int delay) {
+        int newDelay = delay;
+
         if (Objects.equals(policy, "linear")) {
-            delay = min(delay + MIN_DELAY, MAX_DELAY);
+            newDelay = min(delay + MIN_DELAY, MAX_DELAY);
         }
 
         if (Objects.equals(policy, "exponent")) {
-            delay = min(delay * FACTOR, MAX_DELAY);
+            newDelay = min(delay * FACTOR, MAX_DELAY);
         }
 
-        return delay;
+        return newDelay;
     }
 }
