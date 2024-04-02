@@ -2,9 +2,11 @@ package edu.java.clients.github;
 
 import edu.java.dto.github.GitHubResponse;
 import java.net.URISyntaxException;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import static java.lang.Math.min;
 
 @Component
 public class GitHubClientImpl implements GitHubClient {
@@ -13,6 +15,8 @@ public class GitHubClientImpl implements GitHubClient {
 
     @Value("${github.baseUrl}")
     String baseUrl;
+    @Value("${github.retryAmount}")
+    int retryAmount;
 
     public GitHubClientImpl() {
         client = WebClient.builder().baseUrl(baseUrl).build();
@@ -23,12 +27,53 @@ public class GitHubClientImpl implements GitHubClient {
         client = WebClient.builder().baseUrl(baseUrl).build();
     }
 
-    @Override
-    public GitHubResponse fetchUpdates(String user, String repository) throws URISyntaxException {
+    public GitHubResponse tryFetchUpdates(String user, String repository) {
         return client.get()
-            .uri("/repos/{user}/{repo}", user, repository)
+            .uri(baseUrl + "/repos/{user}/{repo}", user, repository)
             .retrieve()
             .bodyToMono(GitHubResponse.class)
             .block();
+    }
+
+    @Value("${github.policy}")
+    String policy;
+    @Value("${github.enableRetry}")
+    boolean enableRetry;
+
+    private final static int MIN_DELAY = 100;
+    private final static int MAX_DELAY = 1000_000;
+    private final static int FACTOR = 2;
+
+    @Override
+    public GitHubResponse fetchUpdates(String user, String repository) throws URISyntaxException, InterruptedException {
+        if (enableRetry) {
+            int attempts = 1;
+            int delay = MIN_DELAY;
+
+            while (attempts < retryAmount) {
+                try {
+                    return tryFetchUpdates(user, repository);
+                } catch (Exception e) {
+                    ++attempts;
+                    Thread.sleep(getDelay(delay));
+                }
+            }
+        }
+
+        return tryFetchUpdates(user, repository);
+    }
+
+    private int getDelay(int delay) {
+        int newDelay = delay;
+
+        if (Objects.equals(policy, "linear")) {
+            newDelay = min(delay + MIN_DELAY, MAX_DELAY);
+        }
+
+        if (Objects.equals(policy, "exponent")) {
+            newDelay = min(delay * FACTOR, MAX_DELAY);
+        }
+
+        return newDelay;
     }
 }

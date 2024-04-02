@@ -26,7 +26,9 @@ public class StackOverFlowClientTest {
             1L,
             new StackOverFlowUser("mylogin"),
             "myname",
-            OffsetDateTime.parse("2024-02-20T12:00:00Z"))));
+            OffsetDateTime.parse("2024-02-20T12:00:00Z"),
+            0L)),
+            0L);
 
         String responseBody = """
                 {
@@ -38,6 +40,7 @@ public class StackOverFlowClientTest {
                             "last_activity_date": 1708430400,
                             "creation_date": 1707110425,
                             "question_id": 1,
+                            "": 0,
                             "title": "myname"
                         }
                     ]

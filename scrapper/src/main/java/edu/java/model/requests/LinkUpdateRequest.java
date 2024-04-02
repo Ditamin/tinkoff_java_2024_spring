@@ -1,4 +1,4 @@
-package edu.java.model;
+package edu.java.model.requests;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +12,6 @@ public record LinkUpdateRequest(
     URI url,
     String description,
     @NotEmpty
-    List<Integer> tgChatIds
+    List<Long> tgChatIds
 ) {
 }

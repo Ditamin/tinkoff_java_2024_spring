@@ -1,9 +1,10 @@
-package edu.java.model;
+package edu.java.model.requests;
 
+import java.net.URI;
 import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
 
-public record RemoveLinkRequest(
+public record AddLinkRequest(
     @NotBlank
-    String link
+    URI link
 ) {
 }
