@@ -19,16 +19,20 @@ logging:
 
 github:
   baseUrl: "https://api.github.com"
+  enableRetry: false
   retryAmount: 5
   policy: linear
 
+
 stackoverflow:
   baseUrl: "https://api.stackexchange.com/2.3"
+  enableRetry: false
   retryAmount: 5
   policy: linear
 
 bot:
   baseUrl: "http://localhost:8090"
+  enableRetry: false
   retryAmount: 5
   policy: linear
 

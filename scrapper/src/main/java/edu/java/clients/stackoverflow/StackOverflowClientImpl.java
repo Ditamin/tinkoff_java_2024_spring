@@ -23,6 +23,8 @@ public class StackOverflowClientImpl implements StackOverflowClient {
     int retryAmount;
     @Value("${stackoverflow.policy}")
     String policy;
+    @Value("${stackoverflow.enableRetry}")
+    boolean enableRetry;
 
     private final static int MIN_DELAY = 100;
     private final static int MAX_DELAY = 1000_000;
@@ -70,15 +72,17 @@ public class StackOverflowClientImpl implements StackOverflowClient {
     }
 
     public StackOverFlowResponse tryFetchUpdates(Long questionId) throws InterruptedException {
-        int attempts = 1;
-        int delay = MIN_DELAY;
+        if (enableRetry) {
+            int attempts = 1;
+            int delay = MIN_DELAY;
 
-        while (attempts < retryAmount) {
-            try {
-                return fetchUpdates(questionId);
-            } catch (Exception e) {
-                ++attempts;
-                Thread.sleep(getDelay(delay));
+            while (attempts < retryAmount) {
+                try {
+                    return fetchUpdates(questionId);
+                } catch (Exception e) {
+                    ++attempts;
+                    Thread.sleep(getDelay(delay));
+                }
             }
         }
 

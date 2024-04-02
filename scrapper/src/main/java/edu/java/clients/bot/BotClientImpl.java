@@ -39,21 +39,25 @@ public class BotClientImpl implements BotClient {
 
     @Value("${bot.policy}")
     String policy;
+    @Value("${bot.enableRetry}")
+    boolean enableRetry;
 
     private final static int MIN_DELAY = 100;
     private final static int MAX_DELAY = 1000_000;
     private final static int FACTOR = 2;
 
     public String trySendUpdateLink(LinkUpdateRequest linkUpdateRequest) throws InterruptedException {
-        int attempts = 1;
-        int delay = MIN_DELAY;
+        if (enableRetry) {
+            int attempts = 1;
+            int delay = MIN_DELAY;
 
-        while (attempts < retryAmount) {
-            try {
-                return sendUpdateLink(linkUpdateRequest);
-            } catch (Exception e) {
-                ++attempts;
-                Thread.sleep(getDelay(delay));
+            while (attempts < retryAmount) {
+                try {
+                    return sendUpdateLink(linkUpdateRequest);
+                } catch (Exception e) {
+                    ++attempts;
+                    Thread.sleep(getDelay(delay));
+                }
             }
         }
 
