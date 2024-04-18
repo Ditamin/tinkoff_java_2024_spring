@@ -2,7 +2,7 @@ name: Scrapper Build
 
 on:
   workflow_dispatch:
-  pull_request:
+  push:
     paths:
       - .github/workflows/scrapper.yml
       - scrapper/**
