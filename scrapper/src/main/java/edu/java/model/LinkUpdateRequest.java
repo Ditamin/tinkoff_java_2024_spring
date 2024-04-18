@@ -7,11 +7,11 @@ import java.util.List;
 
 public record LinkUpdateRequest(
     @NotNull
-    Integer id,
+    Long id,
     @NotNull
     URI url,
     String description,
     @NotEmpty
-    List<Integer> tgChatIds
+    List<Long> tgChatIds
 ) {
 }
